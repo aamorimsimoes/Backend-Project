@@ -22,3 +22,5 @@ The default settings come with anchors for the following tags:
 - NOTE- An important note for a specific code section
 - REVIEW- An item that needs additional review
 - SECTION- Used to define a region (See 'Hierarchical anchors')
+
+$host = 'localhost:8889'; // REVIEW
