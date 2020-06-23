@@ -93,8 +93,8 @@ function reload(done) {
 
 function connect(done) {
   browserSync.init(null, {
-    browser: ['chrome', 'firefox'],
-    proxy: '127.0.0.1',
+    browser: ['chrome'],
+    proxy: '127.0.0.1:8888',
     port: 8080,
     open: 'external',
     reloadOnRestart: true,
@@ -102,7 +102,7 @@ function connect(done) {
   });
   done();
 }
-
+// REVIEW browser and proxy selection maybe selected wrong
 
 function watcher() {
   gulp.watch(paths.styles.src, styles);
