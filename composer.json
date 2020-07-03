@@ -1,6 +1,7 @@
 {
     "require": {
         "phpmailer/phpmailer": "^6.1",
-        "claviska/simpleimage": "^3.3"
+        "claviska/simpleimage": "^3.3",
+        "fzaninotto/faker": "^1.9"
     }
 }
