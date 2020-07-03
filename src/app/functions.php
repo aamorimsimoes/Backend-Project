@@ -10,7 +10,7 @@
 
 function conn()
 {
-    $host = 'localhost';
+    $host = 'localhost:8889';
     $db   = 'company_sta'; // REVIEW
     $user = 'root';
     $pass = 'root';
@@ -49,12 +49,32 @@ use PHPMailer\PHPMailer\Exception;
 
 function email($to, $subject, $message, $output)
 {
-    require $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
+    //require $_SERVER['DOCUMENT_ROOT'] . '../vendor/autoload.php';
+    echo $output;
+    require '../../vendor/autoload.php';
+    
     $mail = new PHPMailer(true);
-
+    
     try {
         //Server settings
         //$mail->SMTPDebug = SMTP::DEBUG_SERVER;
+
+        //Server settings
+        //$mail->SMTPDebug = SMTP::DEBUG_SERVER;
+        
+        // $mail->isSMTP();
+        // $mail->Host       = 'hosting63.serverhs.org';
+        // $mail->SMTPAuth   = true;
+        // $mail->Username   = 'fullstackgalileu@euricocorreia.pt';
+        // $mail->Password   = 'sabrosa21.';
+        // $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+        // $mail->Port       = 465;
+
+        //Recipients
+        // $mail->setFrom('fullstackgalileu@euricocorreia.pt', 'Staff Expense Tracker');
+        // $mail->addAddress($to);
+        // $mail->addReplyTo('fullstackgalileu@euricocorreia.pt', 'Information');
+
         $mail->isSMTP();
         $mail->Host       = 'smtp.gmail.com';
         $mail->SMTPAuth   = true;
@@ -66,14 +86,14 @@ function email($to, $subject, $message, $output)
         //Recipients
         $mail->setFrom('andreamorimsimoes@gmail.com', 'STA App');
         $mail->addAddress($to);
-        $mail->addReplyTo('no-reply@app.pt', 'Information');
+        $mail->addReplyTo('andreamorimsimoes@gmail.com', 'Information');
 
         // Content
         $mail->isHTML(true);
         $mail->Subject = $subject;
         $mail->Body    = $message;
         //$mail->AltBody = 'Copy-past this code somewhere: '.$token;
-
+        
         $mail->send();
         echo $output;
     } catch (Exception $e) {
