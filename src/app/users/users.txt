@@ -1,0 +1,24 @@
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `name` varchar(50) DEFAULT NULL,
+  `email` varchar(254) NOT NULL,
+  `password` varchar(100) NOT NULL,
+  `status` int(11) NOT NULL,
+  `token` varchar(128) NOT NULL,
+  `level` int(11) NOT NULL,
+  `registration_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `name`, `email`, `password`, `status`, `token`, `level`, `registration_date`) VALUES
+(27, 'Amorim', 'andreamorimsimoes@gmail.com', '$2y$10$YzU4BQDj6n.U/wejXuLs/un/Xw/pIYnUdspn.hjawOXWdizdeCLWu', 1, '7256da09999c56bc1584e1ce3bad48f7ea96c480', 2, '2020-06-19 21:43:57'),
+(31, 'Filipe', 'andrefilipeamorim@hotmail.com', '$2y$10$OJCmW0QU2mJxbtz5nWNYSOCxfXqVwzsgAJ3zJEyhQUjqRb6LvOut.', 1, 'b2529d270734172a76bfa180483c6ee17fa7a1ad', 1, '2020-06-23 22:45:22');
+
+INSERT INTO `users` (`id`, `name`, `email`, `password`, `status`, `token`, `level`, `registration_date`) VALUES (2, 'Filipe', 'andrefilipeamorim@hotmail.com', '$2y$10$OJCmW0QU2mJxbtz5nWNYSOCxfXqVwzsgAJ3zJEyhQUjqRb6LvOut.', 1, 'b2529d270734172a76bfa180483c6ee17fa7a1ad', 1, '2020-06-23 22:45:22');
