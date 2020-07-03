@@ -4,9 +4,7 @@ if (!isset($_SESSION['loggedin'])) {
   header('Location: signin.php');
   exit;
 } else {
-  //'<br>Session: '.session_id().'<br><br><a href=signout.php>Sair</a>';
   require_once('includes/head.php'); ?>
-
 
   <body class="app">
     <?php
@@ -18,7 +16,7 @@ if (!isset($_SESSION['loggedin'])) {
         <?php require_once('includes/menu.php'); ?>
         <div class="flex flex-wrap justify-content-center align-items-start">
           <?php
-          $sql = "SELECT * FROM news WHERE status = 2 ORDER BY date DESC LIMIT 3";
+          $sql = "SELECT * FROM news WHERE status = 2 ORDER BY date DESC LIMIT 2"; // NOTE If you want to limit the number os news to show: ORDER BY date DESC LIMIT (number of news to publish)
           $stmt = conn()->prepare($sql);
           if ($stmt->execute()) {
             $n = $stmt->rowCount();
@@ -41,16 +39,16 @@ if (!isset($_SESSION['loggedin'])) {
           }
           ?>
           <?php
-          $sql = "SELECT * FROM events WHERE status = 2 ORDER BY date DESC LIMIT 3";
+          $sql = "SELECT * FROM products WHERE status = 2 ORDER BY date DESC LIMIT 3";
           $stmt = conn()->prepare($sql);
           if ($stmt->execute()) {
             $n = $stmt->rowCount();
             if ($n > 0) {
-              echo "<h1 style='width:100%;display:block;text-align:center'>Latest Events:</h1>";
+              echo "<h1 style='width:100%;display:block;text-align:center'>Latest products:</h1>";
               $data = $stmt->fetchAll();
               $stmt = null;
               foreach ($data as $r) { ?>
-                <div class="card" onclick="location.href='crud/read.php?s=events&token=<?= $r['token'] ?>'" style="cursor: pointer;">
+                <div class="card" onclick="location.href='crud/read.php?s=products&token=<?= $r['token'] ?>'" style="cursor: pointer;">
                   <img src="uploads/<?= $r['token'] ?>/images/1.jpg" alt="Avatar" style="width:100%">
                   <div class="card-container">
                     <p style="font-size:smaller;display:flex;align-items:center">by <?= $r['author'] ?> on <?= $r['date'] ?></p>

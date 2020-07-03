@@ -6,7 +6,7 @@
     } else {
         require_once('functions.php');
         require_once('includes/head.php');
-        require_once('../vendor/claviska/simpleimage/src/claviska/SimpleImage.php');
+        require_once('../../vendor/claviska/simpleimage/src/claviska/SimpleImage.php');
         $token = !empty($_GET['token']) ? $_GET['token'] : null;
         $section = 'Profile';
 
@@ -42,11 +42,11 @@
               </li>
               <li>
                 <label for="password">Password</label>
-                <input type="password" name="password">
+                <input type="password" name="password" placeholder="Insert password">
               </li>
               <li>
                 <label for="cpassword">Password (confirmation)</label>
-                <input type="password" name="cpassword">
+                <input type="password" name="cpassword" placeholder="Confirm password">
               </li>
               <li>
                 <label for="pic">Picture</label>
@@ -67,24 +67,25 @@
             $cpassword    = $_POST['cpassword'];
             $token        = $_POST['token'];
 
-            $dir          = "users/$token/";
+            $dir          = "uploads/avatar/$token/";
             $file         = $_FILES["pic"]["name"];
+            var_dump($_FILES);
 
 
-            $allows_ext   = array('jpg');
+            $allows_ext   = array('png','gif','jpg','jpeg');
             $allows_size  = 1048576;
 
-            $ext    = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+            $ext          = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 
             //$path   = $dir.basename($file);
-            $path   = $dir.basename("$token.$ext");
+            $path         = $dir.basename("$token.$ext");
 
             if (!empty($password) && $password === $cpassword && !empty($email)) {
                 $password   = password_hash($_POST['cpassword'], PASSWORD_BCRYPT);
 
                 if (in_array($ext, $allows_ext)) {
                     if ($_FILES["pic"]["size"] > $allows_size) {
-                        echo "Uploaded file is huge (".$_FILES["pic"]["size"].")";
+                        echo "Uploaded file is huge (".$_FILES["pic"]["size"]." Mb)";
                     } else {
                         $sql = "UPDATE users SET name = ?, email = ?, password = ? WHERE token = ?";
 
@@ -97,23 +98,26 @@
                         if ($stmt->execute()) {
                             $stmt = null;
                             if (!is_dir($dir)) {
-                              mkdir($dir, false, true);
+                              mkdir($dir, 0777, true);
                             }
                             move_uploaded_file($_FILES["pic"]["tmp_name"], $path);
                             try {
                               // Create a new SimpleImage object
+                      
                               $image = new \claviska\SimpleImage();
+                              
                               $path80   = $dir.basename($token."-80x80.".$ext);
                               $path320   = $dir.basename($token."-320x320.".$ext);
                               // Magic! ✨
+                              
                               $image
-                                ->fromFile($path)                     // load image.jpg
-                                ->autoOrient()                              // adjust orientation based on exif data
-                                ->resize(320, 320)                          // resize to 320x200 pixels
-                                ->toFile($path320)      // convert to PNG and save a copy to new-image.png
-                                ->resize(80, 80)                          // resize to 320x200 pixels
-                                ->toFile($path80);      // convert to PNG and save a copy to new-image.png
-                                header("Location: ../");
+                                ->fromFile($path)   // load image.jpg
+                                ->autoOrient()      // adjust orientation based on exif data
+                                ->resize(320, 320)  // resize to 320x200 pixels
+                                ->toFile($path320, "image/jpeg")  // convert to PNG and save a copy to new-image.png
+                                ->resize(80, 80)    // resize to 320x200 pixels
+                                ->toFile($path80, "image/jpeg");  // convert to PNG and save a copy to new-image.png
+                                header("Location: /app/profile.php?token=$token");
                               // And much more! 💪
                             } catch(Exception $err) {
                               // Handle errors
