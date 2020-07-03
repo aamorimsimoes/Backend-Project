@@ -21,7 +21,7 @@ require_once('functions.php');
       if ($stmt->execute([1, 1, $email, $token, 0])) {
           $stmt = null;
 
-          $dir = 'users/'.$token;
+          $dir = 'uploads/avatar/'.$token;
           if (!file_exists($dir)) {
               mkdir($dir, 0777, true);
           }
@@ -30,7 +30,7 @@ require_once('functions.php');
           echo "User verified!";
 
           $subject = 'Account verified';
-          $message = '<a href=http://www.rbos.pt/>Signin into your account</a>';
+          $message = '<a href=http://localhost:8888/app/signin.php>Signin into your account</a>';
           $output = '<p>A thank you message has been sent to '.$email.'</p>';
 
           email($email, $subject, $message, $output);
