@@ -1,30 +1,6 @@
 <?php
   header('Location: /app');
   exit;
-
-
-
-
-  $arrA = array('João', 'Matilde', 2);
-  $user = array('name'=>'Jorge', 'email'=>'jorgegamito@gmail.com', 'level'=>2);
-
-  $colors = array(
-    array('Amarelo', 'fome', 'energia'),
-    array('Vermelho', 'paixão', 'energia'),
-    array('Azul', 'serenidade', 'tecnologia'),
-    array('Preto', 'luxo', 'morte')
-  );
-
-  //echo $arrA[0];
-  //echo $user['name'];
-
-  //echo $colors[2][1];
-  //echo '<pre>';
-  //var_dump($colors);
-  //echo '</pre>';
-
-
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
