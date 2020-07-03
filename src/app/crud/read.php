@@ -6,7 +6,7 @@ if (!isset($_SESSION['loggedin'])) {
 } else {
   //'<br>Session: '.session_id().'<br><br><a href=signout.php>Sair</a>';
   require_once('../includes/head.php');
-  require_once('../../vendor/claviska/simpleimage/src/claviska/SimpleImage.php');
+  require_once('../../../vendor/claviska/simpleimage/src/claviska/SimpleImage.php');
 ?>
 
 

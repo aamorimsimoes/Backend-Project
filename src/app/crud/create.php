@@ -18,7 +18,8 @@ if (!isset($_SESSION['loggedin'])) {
       $r = $stmt->fetch();
       $stmt = null;
     }
-  } ?>
+  }
+?>
 
   <body class="app">
     <?php require_once('../includes/header.php'); ?>
@@ -37,10 +38,12 @@ if (!isset($_SESSION['loggedin'])) {
                   <label for="title">Title</label>
                   <input type="text" name="title" value="<?php echo !empty($r['title']) ? $r['title'] : null; ?>">
                 </li>
-                <li>
-                  <label for="summary">Summary</label>
-                  <textarea rows="3" name="summary"><?php echo !empty($r['summary']) ? $r['summary'] : null; ?></textarea>
-                </li>
+                <?php if ($section === "news") { ?>
+                  <li>
+                    <label for="summary">Summary</label>
+                    <textarea rows="3" name="summary"><?php echo !empty($r['summary']) ? $r['summary'] : null; ?></textarea>
+                  </li>
+                <?php } ?>
                 <li>
                   <label for="body">Body</label>
                   <textarea rows="10" name="body"><?php echo !empty($r['body']) ? $r['body'] : null; ?></textarea>
@@ -53,10 +56,30 @@ if (!isset($_SESSION['loggedin'])) {
                   <label for="author">Image</label>
                   <input type="file" <?= ($section === 'events') ? "multiple=\"multiple\" name=\"image[]\"" : "name=\"image\"" ?> accept="image/x-png,image/gif,image/jpeg">
                 </li>
-                <li>
-                  <label for="author">File</label>
-                  <input type="file" multiple="multiple" name="file[]" accept="application/pdf,application/zip,application/x-zip,application/x-zip-compressed,application/octet-stream">
-                </li>
+                <?php if ($section === "products") {
+                  $sql = "SELECT * FROM categories";
+                  $stmt = conn()->prepare($sql);
+                  if ($stmt->execute()) {
+                    $n = $stmt->rowCount();
+                    if ($n > 0) {
+                      $cat = $stmt->fetchAll();
+                      $stmt = null;
+                    }
+                  }
+                ?>
+                  <li>
+                    <label for="categories">Categories</label>
+                    <select name="categories">
+                      <?php
+                        foreach ($cat as $c) {
+                          $active = $c['id'] === $r['categories_id'] ? "selected" : null;
+                          echo "<option ".$active." value=".$c['id'].">" . $c['category'] . " </option>";
+                        }
+                      ?>
+                    </select>
+                  </li>
+                <?php
+                } ?>
                 <?php
                 if ($_SESSION['level'] >= 2) { ?>
                   <li>
@@ -79,13 +102,16 @@ if (!isset($_SESSION['loggedin'])) {
           </form>
           <?php
           if (!empty($_POST)) {
-            $title      = $_POST['title'];
-            $summary    = $_POST['summary'];
-            $body       = $_POST['body'];
-            $author     = $_POST['author'];
-            $images      = $_FILES['image'];
-            $files      = $_FILES['file'];
-            $errors     = [];
+            $title        = $_POST['title'];
+            $summary      = $_POST['summary'];
+            $body         = $_POST['body'];
+            $author       = $_POST['author'];
+            $images       = $_FILES['image'];
+            $usersId      = $_SESSION['usersid'];
+            $categoriesId = $_POST['categories'];
+            $errors       = [];
+            echo $categoriesId;
+            echo $usersId;
 
             $status     = !empty($_POST['status']) ? $_POST['status'] : 0;
             $token      = !empty($_POST['token']) ? $_POST['token'] : sha1(bin2hex(date('U')));
@@ -93,9 +119,6 @@ if (!isset($_SESSION['loggedin'])) {
             $section    = $_POST['section'];
             if (is_array($images['tmp_name']) && $images['tmp_name'][0] == '') {
               unset($images);
-            }
-            if (is_array($files['tmp_name']) && $files['tmp_name'][0] == '') {
-              unset($files);
             }
             if (!empty($images['tmp_name'])) {
               if (is_array($images['size'])) {
@@ -120,20 +143,6 @@ if (!isset($_SESSION['loggedin'])) {
                 }
               }
             }
-            if (!empty($files['tmp_name'])) {
-              foreach ($files['size'] as $size) {
-                if ($size > 4194304) {
-                  array_push($errors, "Error: Maximum size for files is 4MB");
-                  break;
-                }
-              }
-              foreach ($files['name'] as $name) {
-                if (strtolower(strchr($name, '.')) != '.zip' && strtolower(strchr($name, '.')) != '.pdf') {
-                  array_push($errors, "Error: Invalid file(s) type");
-                  break;
-                }
-              }
-            }
             if (!empty($errors)) {
               foreach ($errors as $e) {
                 echo $e;
@@ -143,7 +152,7 @@ if (!isset($_SESSION['loggedin'])) {
               if (!empty($images['tmp_name'])) {
                 if (is_array($images['tmp_name'])) {
                   if (count($images['tmp_name']) > 0) {
-                    $path = $_SERVER['DOCUMENT_ROOT'] . "app/uploads/$token/images/";
+                    $path = $_SERVER['DOCUMENT_ROOT'] . "app/uploads/$section/$token/";
                     if (is_dir($path)) {
                       deleteDirectory($path);
                     }
@@ -163,34 +172,13 @@ if (!isset($_SESSION['loggedin'])) {
                   }
                 } else {
                   $extension = strchr($images['name'], '.');
-                  $path = $_SERVER['DOCUMENT_ROOT'] . "app/uploads/$token/images/";
+                  $path = $_SERVER['DOCUMENT_ROOT'] . "app/uploads/$section/$token/";
                   if (is_dir($path)) {
                     deleteDirectory($path);
                   }
                   mkdir($path, false, true);
                   if (!move_uploaded_file($images['tmp_name'], $path . $token . strchr($images['name'], '.'))) {
                     array_push($errors, "Error: An error occurred uploading image.");
-                  }
-                }
-              }
-              if (!empty($files['tmp_name'])) {
-                if (count($files['tmp_name']) > 0) {
-                  $path = $_SERVER['DOCUMENT_ROOT'] . "app/uploads/$token/files/";
-                  if (is_dir($path)) {
-                    deleteDirectory($path);
-                  }
-                  mkdir($path, false, true);
-                  $extensions = [];
-                  foreach ($files['name'] as $file) {
-                    array_push($extensions, strchr($file, '.'));
-                  }
-                  $i = 0;
-                  foreach ($files['tmp_name'] as $file) {
-                    if (!move_uploaded_file($file, $path . ($i + 1) . strchr($extensions[$i], '.'))) {
-                      array_push($errors, "Error: An error occurred uploading your files.");
-                      break;
-                    }
-                    $i++;
                   }
                 }
               }
@@ -201,46 +189,81 @@ if (!isset($_SESSION['loggedin'])) {
                 die();
               }
             }
+            if ($section === "news") {
+              if (!empty($_POST['token'])) {
 
-            if (!empty($_POST['token'])) {
-              if ($_SESSION['level'] >= 2) {
-                $sql = "UPDATE " . $section . " SET title = ?, summary = ?, body = ?, author = ?, status = ? WHERE token = ?";
+                if ($_SESSION['level'] >= 2) {
+                  $sql = "UPDATE " . $section . " SET title = ?, summary = ?, body = ?, author = ?, status = ? WHERE token = ?";
+                } else {
+                  $sql = "UPDATE " . $section . " SET title = ?, summary = ?, body = ?, author = ? WHERE token = ?";
+                }
+
+                $stmt = conn()->prepare($sql);
+                $stmt->bindValue(1, $title, PDO::PARAM_STR);
+                $stmt->bindValue(2, $summary, PDO::PARAM_STR);
+                $stmt->bindValue(3, $body, PDO::PARAM_STR);
+                $stmt->bindValue(4, $author, PDO::PARAM_STR);
+
+
+                if ($_SESSION['level'] >= 2) {
+                  $stmt->bindValue(5, $status, PDO::PARAM_INT);
+                  $stmt->bindValue(6, $token, PDO::PARAM_STR);
+                } else {
+                  $stmt->bindValue(5, $token, PDO::PARAM_STR);
+                }
               } else {
-                $sql = "UPDATE " . $section . " SET title = ?, summary = ?, body = ?, author = ? WHERE token = ?";
-              }
-
-              $stmt = conn()->prepare($sql);
-              $stmt->bindValue(1, $title, PDO::PARAM_STR);
-              $stmt->bindValue(2, $summary, PDO::PARAM_STR);
-              $stmt->bindValue(3, $body, PDO::PARAM_STR);
-              $stmt->bindValue(4, $author, PDO::PARAM_STR);
-
-
-              if ($_SESSION['level'] >= 2) {
+                $sql = "INSERT INTO " . $section . " (title, summary, body, author, status, token, date, users_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                $stmt = conn()->prepare($sql);
+                $stmt->bindValue(1, $title, PDO::PARAM_STR);
+                $stmt->bindValue(2, $summary, PDO::PARAM_STR);
+                $stmt->bindValue(3, $body, PDO::PARAM_STR);
+                $stmt->bindValue(4, $author, PDO::PARAM_STR);
                 $stmt->bindValue(5, $status, PDO::PARAM_INT);
                 $stmt->bindValue(6, $token, PDO::PARAM_STR);
-              } else {
-                $stmt->bindValue(5, $token, PDO::PARAM_STR);
+                $stmt->bindValue(7, $timestamp, PDO::PARAM_STR);
+                $stmt->bindValue(8, $usersId, PDO::PARAM_STR);
               }
-            } else {
-              $sql = "INSERT INTO " . $section . " (title, summary, body, author, status, token, date) VALUES (?, ?, ?, ?, ?, ?, ?)";
-              $stmt = conn()->prepare($sql);
-              $stmt->bindValue(1, $title, PDO::PARAM_STR);
-              $stmt->bindValue(2, $summary, PDO::PARAM_STR);
-              $stmt->bindValue(3, $body, PDO::PARAM_STR);
-              $stmt->bindValue(4, $author, PDO::PARAM_STR);
-              $stmt->bindValue(5, $status, PDO::PARAM_INT);
-              $stmt->bindValue(6, $token, PDO::PARAM_STR);
-              $stmt->bindValue(7, $timestamp, PDO::PARAM_STR);
-            }
+            } else if ($section === "products") {
+              if (!empty($_POST['token'])) {
+                if ($_SESSION['level'] >= 2) {
+                  $sql = "UPDATE " . $section . " SET title = ?, body = ?, author = ?, status = ? WHERE token = ?";
+                } else {
+                  $sql = "UPDATE " . $section . " SET title = ?, body = ?, author = ? WHERE token = ?";
+                }
 
+                $stmt = conn()->prepare($sql);
+                $stmt->bindValue(1, $title, PDO::PARAM_STR);
+                $stmt->bindValue(2, $body, PDO::PARAM_STR);
+                $stmt->bindValue(3, $author, PDO::PARAM_STR);
+
+
+                if ($_SESSION['level'] >= 2) {
+                  $stmt->bindValue(4, $status, PDO::PARAM_INT);
+                  $stmt->bindValue(5, $token, PDO::PARAM_STR);
+                } else {
+                  $stmt->bindValue(4, $token, PDO::PARAM_STR);
+                }
+              } else {
+                $sql = "INSERT INTO products (title, summary, body, status, token, date, categories_id, users_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                $stmt = conn()->prepare($sql);
+                $stmt->bindValue(1, $title, PDO::PARAM_STR);
+                $stmt->bindValue(2, $summary, PDO::PARAM_STR);
+                $stmt->bindValue(3, $body, PDO::PARAM_STR);
+                $stmt->bindValue(4, $status, PDO::PARAM_INT);
+                $stmt->bindValue(5, $token, PDO::PARAM_STR);
+                $stmt->bindValue(6, $timestamp, PDO::PARAM_STR);
+                $stmt->bindValue(7, $categoriesId, PDO::PARAM_STR);
+                $stmt->bindValue(8, $usersId, PDO::PARAM_STR);
+              }
+            }
             if ($stmt->execute()) {
               $stmt = null;
-              //echo "Registo inserido";
+              echo "Registo inserido";
               header("Location: ../$section/");
               exit;
             }
-          } ?>
+          }
+          ?>
         </div>
       </div>
     </main>
@@ -249,7 +272,6 @@ if (!isset($_SESSION['loggedin'])) {
   </body>
 
   </html>
-
 
 <?php
 } ?>
