@@ -7,7 +7,7 @@ require_once('includes/head.php');
   <main>
     <div class="container auth">
       <div>
-        <h1>SuperApp®</h1>
+        <h1>Company STA App®</h1>
         <form action="signin.php" method="post">
         <fieldset>
           <ul>
@@ -32,7 +32,7 @@ require_once('includes/head.php');
             $email      = $_POST['email'];
 
             if (!empty($password) && !empty($email)) {
-                $sql = "SELECT email, password, token, level FROM users WHERE email = ? AND level > ? AND status > ? LIMIT 1";
+                $sql = "SELECT email, password, token, level, name, id FROM users WHERE email = ? AND level > ? AND status > ? LIMIT 1";
 
                 $stmt = conn()->prepare($sql);
                 if ($stmt->execute([$email, 0, 0])) {
@@ -50,6 +50,8 @@ require_once('includes/head.php');
                         $_SESSION['email'] = $r['email'];
                         $_SESSION['token'] = $r['token'];
                         $_SESSION['level'] = $r['level'];
+                        $_SESSION['name'] = $r['name'];
+                        $_SESSION['usersid'] = $r['id'];
 
                         header("Location: home.php");
                     } else {

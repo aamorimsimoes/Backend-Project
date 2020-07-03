@@ -6,7 +6,7 @@ require_once('includes/head.php');
   <main>
     <div class="container auth">
       <div>
-        <h1>SuperApp®</h1>
+        <h1>Company STA App®</h1>
         <form action="signup.php" method="post">
           <fieldset>
             <ul>
@@ -34,7 +34,6 @@ require_once('includes/head.php');
             $cpassword  = $_POST['cpassword'];
             $email      = $_POST['email'];
 
-
             if (!empty($password) && $password === $cpassword && !empty($email)) {
                 $password   = password_hash($_POST['cpassword'], PASSWORD_BCRYPT);
                 $level      = 0;
@@ -42,19 +41,23 @@ require_once('includes/head.php');
                 $token      = sha1(bin2hex(date('U')));
                 $timestamp  = date('U');
 
-                $sql = "INSERT INTO users (email, password, level, status, token, timestamp) VALUES (?, ?, ?, ?, ?, ?)";
+                $sql = "INSERT INTO users (email, password, level, status, token) VALUES (?, ?, ?, ?, ?)";
 
-                $stmt = conn()->prepare($sql);
-                if ($stmt->execute([$email, $password, $level, $status, $token, $timestamp])) {
-                    $stmt = null;
-
-                    echo "User signed up!";
-
-                    $subject = 'Verify your account';
-                    $message = 'Click the link to verify your account: <br><b><a href=http://www.rbos.pt/app/verify.php?token='.$token.'&email='.$email.'>'.$token.'</a></b>';
-                    $output = '<p>A confirmation message has been sent to '.$email.'</p>';
-
-                    email($email, $subject, $message, $output);
+                try {
+                  $stmt = conn()->prepare($sql);
+                  if ($stmt->execute([$email, $password, $level, $status, $token])) {
+                      $stmt = null;
+  
+                      echo "User signed up!";
+  
+                      $subject = 'Verify your account';
+                      $message = 'Click the link to verify your account: <br><b><a href=http://localhost:8080/app/verify.php?token='.$token.'&email='.$email.'>Click here</a></b>';
+                      $output = '<p>A confirmation message has been sent to '.$email.'</p>';
+  
+                      email($email, $subject, $message, $output);
+                  }
+                } catch (\Throwable $th) {
+                  echo $th;
                 }
             } elseif ($password !== $cpassword) {
                 echo "Passwords do not match";
