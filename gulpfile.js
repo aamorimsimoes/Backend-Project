@@ -111,7 +111,7 @@ function watcher() {
 
 
 
-const build = gulp.series(styles, templates);
+const build = gulp.series(styles, templates, scripts, vendor);
 const watch = gulp.parallel(watcher, connect);
 
 exports.images = images;
