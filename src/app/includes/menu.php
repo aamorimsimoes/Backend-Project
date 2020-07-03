@@ -9,8 +9,10 @@ $pages = array(
     array('Signout','signout.php')
   ),
   array(
+    ($_SESSION['level'] === 2 ? array('Users', 'users') : ""),
+    ($_SESSION['level'] === 2 ? array('Generator', 'faker') : ""),
     array('News', 'news'),
-    array('Events', 'events')
+    array('Products', 'products'),
   )
 );
 

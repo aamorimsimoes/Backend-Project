@@ -3,12 +3,11 @@
     <div class="profile">
       <?php
       $utoken = $_SESSION['token'];
-      if (file_exists($_SERVER['DOCUMENT_ROOT'] . "/app/users/$utoken/$utoken.jpg")) {
-        echo "<img class='avatar' src='http://".$_SERVER['SERVER_NAME']."/app/users/$utoken/$utoken.jpg' >";
+      if (file_exists($_SERVER['DOCUMENT_ROOT'] . "/app/uploads/avatar/$utoken/$utoken-80x80.jpeg")) { // FIXME
+        echo "<img class='avatar' src='uploads/avatar/$utoken/$utoken-80x80.jpeg' >";
       }
-      echo "<div>" . $_SESSION['email'] . "</div>";
+      echo "<div>" . empty($_SESSION['name']) === true ? $_SESSION['email'] : $_SESSION['name'] . "</div>";
       ?>
     </div>
-    <div></div>
   </div>
 </header>
