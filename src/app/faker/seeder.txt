@@ -1,0 +1,55 @@
+('" . $faker->name . "', '" . $faker->email . "', '" . md5($faker->password) . "', '". $faker->numberBetween($min = 0, $max = 1) ."','" . $faker->regexify('[A-Za-z0-9]{20}') . "' , '". $faker->numberBetween($min = 0, $max = 1) ."','" . date('Y-m-d H:i:s', strtotime($faker->iso8601)) . "' )";
+    mysqli_query($conn, $sql);
+
+
+
+
+
+    for ($i = 0; $i < 1; $i++) {
+    $id                 = $faker->numberBetween($min = 11, $max = 150);
+    $title              = "n1";
+    $summary            = "n1";
+    $body               = "n1";
+    $date               = $faker->date;
+    $author             = "n1";
+    $token              = "$faker->uuid";
+    $status             = 1;
+    $users_id           = 1;
+
+    $sql = "INSERT INTO news (id, title, summary, body, date, author, token, status, users_id) VALUES (?, ?, ?, ?, ?, ?, ?, ? ,?)";
+    $stmt = conn()->prepare($sql);
+    $stmt->execute([$id, $title, $summary, $body, $status, $token, $level, $registration_date]);
+    $stmt = null;
+  }
+
+
+PAGINAÇÂO DATA TABLES (JS)
+
+
+
+
+
+  function seederusers()
+  {
+    $faker = Faker\Factory::create();
+    
+    $input = 10;
+    $sql = '';
+
+    for ($i = 0; $i < $input; $i++) {
+      $id                 = $faker->unique()->randomDigit;
+      $name               = $faker->name;
+      $email              = $faker->email;
+      $password           = $faker->password;
+      $status             = 1;
+      $token              = $faker->uuid;
+      $level              = 1;
+      $registration_date  = $faker->date;
+
+      $sql = $sql === '' ? "INSERT INTO users (id, name, email, password, status, token, level, registration_date) VALUES (:id, :name, :email, :password, :status, :token, :level, :registration_date);" : $sql . "INSERT INTO users (id, name, email, password, status, token, level, registration_date) VALUES (:id, :name, :email, :password, :status, :token, :level, :registration_date);";
+    }
+    echo $sql;
+    // $stmt = conn()->prepare($sql);
+    // $stmt->execute([$id, $name, $email, $password, $status, $token, $level, $registration_date]);
+    // $stmt = null;
+  }
