@@ -102,16 +102,16 @@ function connect(done) {
   });
   done();
 }
-// REVIEW browser and proxy selection maybe selected wrong
 
 function watcher() {
   gulp.watch(paths.styles.src, styles);
   gulp.watch(paths.templates.src, templates);
+  gulp.watch(paths.scripts.src, scripts);
 }
 
 
-
-const build = gulp.series(styles, templates, scripts, vendor);
+// to build again: const build = gulp.series(styles, templates, scripts, vendor); 
+const build = gulp.series(styles, templates, scripts);
 const watch = gulp.parallel(watcher, connect);
 
 exports.images = images;
