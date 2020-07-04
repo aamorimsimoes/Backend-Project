@@ -6,6 +6,12 @@ if (!isset($_SESSION['loggedin'])) {
 } else {
   require_once('../functions.php');
   require_once('../includes/head.php');
+  require_once('../faker/users/seederu.php');
+  require_once('../faker/products/seederp.php');
+  //require_once('../faker/news/seedern.php');
+
+  require_once($_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php');
+
   $section = 'faker'; ?>
 
   <body class="app">
@@ -16,37 +22,49 @@ if (!isset($_SESSION['loggedin'])) {
         <div>
           <div class="section-title">
             <h1>Data Generator</h1>
-            <div>
-              <a class="button" onclick="">
-                <svg viewBox="0 0 24 24" width="24" height="24">
-                  <path fill="currentColor" d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-1-11H7v2h4v4h2v-4h4v-2h-4V7h-2v4z" /></svg>Add</a>
-            </div>
           </div>
 
-          <table>
-            <thead>
-              <tr>
-                <th>generate fake users</th>
-                <th>Title</th>
-                <th>Date</th>
-                
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th>foo</th>
-                <th>foo</th>
-                <th>foo</th>
-              </tr>
-            </tbody>
-            <tfoot>
-              <tr>
-                <td>foo1</td>
-                <td>foo2</td>
-                <td>foo2</td>
-              </tr>
-            </tfoot>
-          </table>
+          <div>
+            <h4>Click to create dummy users</h4>
+            <form action="<?php echo htmlentities($_SERVER['PHP_SELF']) ?>" method='post'>
+              <input type="number" name="amount" placeholder="how many?" />
+              <input type="hidden" name="create" value="users">
+              <input type="submit" value="Create users" />
+            </form>
+          </div>
+          <div>
+            <h4>Click to create dummy products</h4>
+            <form action="<?php echo htmlentities($_SERVER['PHP_SELF']) ?>" method='post'>
+              <input type="number" name="amount" placeholder="how many?" />
+              <input type="hidden" name="create" value="products">
+              <input type="submit" value="Create products" />
+            </form>
+          </div>
+          <div>
+            <h4>Click to create dummy news</h4>
+            <form action="<?php echo htmlentities($_SERVER['PHP_SELF']) ?>" method='post'>
+              <input type="number" name="amount" placeholder="how many?" />
+              <input type="hidden" name="create" value="news">
+              <input type="submit" value="Create news" />
+            </form>
+          </div>
+
+          <?php
+          if (!empty($_POST['amount'])){
+            switch ($_POST['create']) {
+            case 'users':
+              seederusers($_POST['amount']);
+              break;
+            case 'products':
+              seederproducts($_POST['amount']);
+              break;
+            case 'news':
+              seedernews($_POST['amount']);
+              break;
+            }
+          }
+          ?>
+
         </div>
       </div>
     </main>
@@ -56,30 +74,5 @@ if (!isset($_SESSION['loggedin'])) {
 
 <?php
 
-  require_once "../../vendor/autoload.php";
-  require_once '../app/functions.php';
-
-  
-  function seederusers()
-  {
-    $faker = Faker\Factory::create();
-    
-    $input = 10;
-
-    for ($i = 0; $i < $input; $i++) {
-      $name               = $faker->name;
-      $email              = $faker->email;
-      $password           = $faker->password;
-      $status             = 1;
-      $token              = $faker->uuid;
-      $level              = 1;
-      $registration_date  = $faker->date;
-
-      $sql = "INSERT INTO users (name, email, password, status, token, level, registration_date) VALUES (?, ?, ?, ?, ?, ?, ?)";
-      $stmt = conn()->prepare($sql);
-      $stmt->execute([$name, $email, $password, $status, $token, $level, $registration_date]);
-      $stmt = null;
-    }
-  }
 }
 ?>
