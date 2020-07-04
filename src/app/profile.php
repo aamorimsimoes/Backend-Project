@@ -76,7 +76,7 @@
             $allows_size  = 1048576;
 
             $ext          = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-
+            
             //$path   = $dir.basename($file);
             $path         = $dir.basename("$token.$ext");
 
@@ -97,6 +97,7 @@
 
                         if ($stmt->execute()) {
                             $stmt = null;
+                            deleteDirectory($dir);
                             if (!is_dir($dir)) {
                               mkdir($dir, 0777, true);
                             }
