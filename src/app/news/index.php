@@ -59,7 +59,7 @@ if (!isset($_SESSION['loggedin'])) {
                       <td class="center"><?php echo $i; ?></td>
                       <td><a href="../crud/create.php?s=news&token=<?php echo $r['token']; ?>"><?php echo $r['title']; ?></a></td>
                       <td class="mono"><?php echo date('d-m-Y', strtotime($r['date'])); ?></td>
-                      <td><?php echo $r['author']; ?></td>
+                      <td class="mono"><?php echo $r['author']; ?></td>
                       <td>
 
                         <?php

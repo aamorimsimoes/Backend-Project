@@ -61,19 +61,6 @@ function email($to, $subject, $message, $output)
 
         //Server settings
         //$mail->SMTPDebug = SMTP::DEBUG_SERVER;
-        
-        // $mail->isSMTP();
-        // $mail->Host       = 'hosting63.serverhs.org';
-        // $mail->SMTPAuth   = true;
-        // $mail->Username   = 'fullstackgalileu@euricocorreia.pt';
-        // $mail->Password   = 'sabrosa21.';
-        // $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-        // $mail->Port       = 465;
-
-        //Recipients
-        // $mail->setFrom('fullstackgalileu@euricocorreia.pt', 'Staff Expense Tracker');
-        // $mail->addAddress($to);
-        // $mail->addReplyTo('fullstackgalileu@euricocorreia.pt', 'Information');
 
         $mail->isSMTP();
         $mail->Host       = 'smtp.gmail.com';

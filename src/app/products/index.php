@@ -56,8 +56,8 @@
                 foreach ($data as $r) { ?>
                   <tr>
                     <td class="center"><?php echo $i; ?></td>
-                    <td><a href="../crud/create.php?s=products&token=<?php echo $r['token']; ?>"><?php echo $r['title']; ?></a></td>
-                    <td><?php echo empty($r['summary']) === true ? "Empty field" : $r['summary']; ?></td>
+                    <td class="wide"><a href="../crud/create.php?s=products&token=<?php echo $r['token']; ?>"><?php echo $r['title']; ?></a></td>
+                    <td class="mono"><?php echo empty($r['summary']) === true ? "Empty field" : $r['summary']; ?></td>
                     
                     <td class="mono"><?php echo date('d-m-Y', strtotime($r['date'])); ?></td>
                     

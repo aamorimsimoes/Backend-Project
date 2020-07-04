@@ -6,7 +6,7 @@
     } else {
         require_once('functions.php');
         require_once('includes/head.php');
-        require_once('../../vendor/claviska/simpleimage/src/claviska/SimpleImage.php');
+        require_once($_SERVER['DOCUMENT_ROOT'].'/vendor/claviska/simpleimage/src/claviska/SimpleImage.php');
         $token = !empty($_GET['token']) ? $_GET['token'] : null;
         $section = 'Profile';
 
