@@ -8,7 +8,7 @@ if (!isset($_SESSION['loggedin'])) {
   require_once('../includes/head.php');
   require_once('../faker/users/seederu.php');
   require_once('../faker/products/seederp.php');
-  //require_once('../faker/news/seedern.php');
+  require_once('../faker/news/seedern.php');
 
   require_once($_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php');
 
@@ -33,19 +33,19 @@ if (!isset($_SESSION['loggedin'])) {
             </form>
           </div>
           <div>
-            <h4>Click to create dummy products</h4>
-            <form action="<?php echo htmlentities($_SERVER['PHP_SELF']) ?>" method='post'>
-              <input type="number" name="amount" placeholder="how many?" />
-              <input type="hidden" name="create" value="products">
-              <input type="submit" value="Create products" />
-            </form>
-          </div>
-          <div>
             <h4>Click to create dummy news</h4>
             <form action="<?php echo htmlentities($_SERVER['PHP_SELF']) ?>" method='post'>
               <input type="number" name="amount" placeholder="how many?" />
               <input type="hidden" name="create" value="news">
               <input type="submit" value="Create news" />
+            </form>
+          </div>
+          <div>
+            <h4>Click to create dummy products</h4>
+            <form action="<?php echo htmlentities($_SERVER['PHP_SELF']) ?>" method='post'>
+              <input type="number" name="amount" placeholder="how many?" />
+              <input type="hidden" name="create" value="products">
+              <input type="submit" value="Create products" />
             </form>
           </div>
 
