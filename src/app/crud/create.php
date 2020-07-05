@@ -53,8 +53,8 @@ if (!isset($_SESSION['loggedin'])) {
                   <input type="text" name="author" value="<?php echo !empty($r['author']) ? $r['author'] : null; ?>">
                 </li>
                 <li>
-                  <label for="author">Image</label>
-                  <input type="file" <?= ($section === 'events') ? "multiple=\"multiple\" name=\"image[]\"" : "name=\"image\"" ?> accept="image/x-png,image/gif,image/jpeg">
+                  <label for="image">Image</label>
+                  <input type="file" <?= ($section === 'news') ? "multiple=\"multiple\" name=\"image[]\"" : "name=\"image\"" ?> accept="image/x-png,image/gif,image/jpeg,image/jpg">
                 </li>
                 <?php if ($section === "products") {
                   $sql = "SELECT * FROM categories";
