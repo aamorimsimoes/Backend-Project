@@ -42,6 +42,7 @@
                       <th class="center">#</th>
                       <th>Title</th>
                       <th>Summary</th>
+                      <th>Category</th>
                       <th>Date</th>
                       <th>Status</th>
                       <th>Edit</th>
@@ -53,14 +54,14 @@
                 <?php
                 
                 $i = 1;
+                // FIXME HOW TO SHOW CATEGORY NAME INSTEAD NUMBER??
                 foreach ($data as $r) { ?>
                   <tr>
                     <td class="center"><?php echo $i; ?></td>
                     <td class="wide"><a href="../crud/create.php?s=products&token=<?php echo $r['token']; ?>"><?php echo $r['title']; ?></a></td>
                     <td class="mono"><?php echo empty($r['summary']) === true ? "Empty field" : $r['summary']; ?></td>
-                    
+                    <td class="center"><?php echo $r['categories_id']; ?></td>
                     <td class="mono"><?php echo date('d-m-Y', strtotime($r['date'])); ?></td>
-                    
                     <td>
 
                       <?php
