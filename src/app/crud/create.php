@@ -54,7 +54,7 @@ if (!isset($_SESSION['loggedin'])) {
                 </li>
                 <li>
                   <label for="image">Image</label>
-                  <input type="file" <?= ($section === 'news') ? "multiple=\"multiple\" name=\"image[]\"" : "name=\"image\"" ?> accept="image/x-png,image/gif,image/jpeg,image/jpg">
+                  <input type="file" <?= ($section === 'news') ? "multiple=\"multiple\" name=\"image[]\"" : "name=\"image\"" ?> accept="image/x-png,image/gif,image/jpeg">
                 </li>
                 <?php if ($section === "products") {
                   $sql = "SELECT * FROM categories";
@@ -110,9 +110,7 @@ if (!isset($_SESSION['loggedin'])) {
             $usersId      = $_SESSION['usersid'];
             $categoriesId = $_POST['categories'];
             $errors       = [];
-            echo $categoriesId;
-            echo $usersId;
-
+            
             $status     = !empty($_POST['status']) ? $_POST['status'] : 0;
             $token      = !empty($_POST['token']) ? $_POST['token'] : sha1(bin2hex(date('U')));
             $timestamp  = date('Y-m-d');
@@ -152,16 +150,18 @@ if (!isset($_SESSION['loggedin'])) {
               if (!empty($images['tmp_name'])) {
                 if (is_array($images['tmp_name'])) {
                   if (count($images['tmp_name']) > 0) {
-                    $path = $_SERVER['DOCUMENT_ROOT'] . "app/uploads/$section/$token/";
+                    $path = $_SERVER['DOCUMENT_ROOT'] . "/app/uploads/$token/";
                     if (is_dir($path)) {
                       deleteDirectory($path);
                     }
-                    mkdir($path, false, true);
+                    mkdir($path, 0777, true);
                     $extensions = [];
                     foreach ($images['name'] as $image) {
                       array_push($extensions, strchr($image, '.'));
                     }
                     $i = 0;
+                    //echo($path);
+                    //var_dump($images);
                     foreach ($images['tmp_name'] as $image) {
                       if (!move_uploaded_file($image, $path . ($i + 1) . strchr($extensions[$i], '.'))) {
                         array_push($errors, "Error: An error occurred uploading your images.");
@@ -172,13 +172,34 @@ if (!isset($_SESSION['loggedin'])) {
                   }
                 } else {
                   $extension = strchr($images['name'], '.');
-                  $path = $_SERVER['DOCUMENT_ROOT'] . "app/uploads/$section/$token/";
+                  $path = $_SERVER['DOCUMENT_ROOT'] . "/app/uploads/$token/";
                   if (is_dir($path)) {
                     deleteDirectory($path);
                   }
-                  mkdir($path, false, true);
+                  mkdir($path, 0777, true);
                   if (!move_uploaded_file($images['tmp_name'], $path . $token . strchr($images['name'], '.'))) {
                     array_push($errors, "Error: An error occurred uploading image.");
+                  }
+                }
+              }
+              if (!empty($files['tmp_name'])) {
+                if (count($files['tmp_name']) > 0) {
+                  $path = $_SERVER['DOCUMENT_ROOT'] . "app/uploads/$token/files/";
+                  if (is_dir($path)) {
+                    deleteDirectory($path);
+                  }
+                  mkdir($path, 0777, true);
+                  $extensions = [];
+                  foreach ($files['name'] as $file) {
+                    array_push($extensions, strchr($file, '.'));
+                  }
+                  $i = 0;
+                  foreach ($files['tmp_name'] as $file) {
+                    if (!move_uploaded_file($file, $path . ($i + 1) . strchr($extensions[$i], '.'))) {
+                      array_push($errors, "Error: An error occurred uploading your files.");
+                      break;
+                    }
+                    $i++;
                   }
                 }
               }

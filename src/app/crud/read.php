@@ -29,8 +29,8 @@ if (!isset($_SESSION['loggedin'])) {
         ?>
             <div class="flex flex-wrap justify-content-center align-items-start">
               <div class="card" style="position:relative;width:900px">
-                <div style="border-radius:5px 5px 0 0;width:100%;height:500px;background-size:cover;background-image:url('http://<?= $_SERVER['SERVER_NAME'] ?>/app/includes/image.php?s=<?= $section ?>&token=<?= $data['token'] ?>');"></div>
-                <div style="font-size:3em;text-align:center;position:absolute;top:0;left:0;width:100%;height:500px;display:flex;align-items:center;justify-content:center;color:white;"><?= $data['title'] ?></div>
+                <div style="border-radius:5px 5px 0 0;width:100%;height:500px;background-size:cover;background-image:url('http://<?= $_SERVER['HTTP_HOST'] ?>/app/includes/image.php?s=<?= $section ?>&token=<?= $data['token'] ?>');"></div>
+                
                 <div class="card-container">
                   <p style="font-size:smaller;display:flex;align-items:center">by <?= $data['author'] ?> on <?= $data['date'] ?>
                     <div>
