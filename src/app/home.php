@@ -49,7 +49,7 @@ if (!isset($_SESSION['loggedin'])) {
               $stmt = null;
               foreach ($data as $r) { ?>
                 <div class="card" onclick="location.href='crud/read.php?s=products&token=<?= $r['token'] ?>'" style="cursor: pointer;">
-                  <img src="uploads/<?= $r['token'] ?>/images/<?= $r['token'] ?>.jpg" alt="productsImage" style="width:100%">
+                  <img src="uploads/<?= $r['token'] ?>/1.jpg" alt="productsImage" style="width:100%">
                   <div class="card-container">
                     <p style="font-size:smaller;display:flex;align-items:center">by <?= $r['author'] ?> on <?= $r['date'] ?></p>
                     <h4><b><?= $r['title'] ?></b></h4>
@@ -61,7 +61,7 @@ if (!isset($_SESSION['loggedin'])) {
             }
           }
           ?>
-      </div>
+        </div>
     </main>
     <?php require_once('includes/footer.php'); ?>
   </body>

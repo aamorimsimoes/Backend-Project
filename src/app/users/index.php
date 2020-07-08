@@ -16,6 +16,11 @@ if (!isset($_SESSION['loggedin'])) {
         <div>
           <div class="section-title">
             <h1>Users</h1>
+            <div>
+              <a class="button" href="<?php $_SERVER['HTTP_HOST']?>../../app/fpdf182/usersfpdf.php" target="_blank"/>
+                <svg viewBox="0 0 24 24" width="24" height="24">
+                  <path fill="currentColor" d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-1-11H7v2h4v4h2v-4h4v-2h-4V7h-2v4z" /></svg>Export data</a>
+            </div>
           </div>
           <?php
           $sql = "SELECT * FROM users WHERE status >= ?";
@@ -73,13 +78,13 @@ if (!isset($_SESSION['loggedin'])) {
                         </a>
                       </td>
                       <td>
-                        <?php 
+                        <?php
                         // NOTE It is not possible to delete the admin user (i.e. level = 2)
                         if ($r['level'] < 2) {
                           echo "<a href='../crud/del.php?s=" . $section . "&token=" . $r['token'] . "' onclick=\"return confirm('Are you sure you want to delete this record?')\">
                         <svg viewBox='0 0 24 24' width='24' height='24'><path fill='currentColor' d='M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-11.414L9.172 7.757 7.757 9.172 10.586 12l-2.829 2.828 1.415 1.415L12 13.414l2.828 2.829 1.415-1.415L13.414 12l2.829-2.828-1.415-1.415L12 10.586z'/></svg>
                       </a>";
-                    }
+                        }
                         ?>
                       </td>
                     </tr>

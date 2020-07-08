@@ -50,7 +50,8 @@ if (!isset($_SESSION['loggedin'])) {
           </div>
 
           <?php
-          if (!empty($_POST['amount'])){
+          
+          if(!empty($_POST['amount'])){
             switch ($_POST['create']) {
             case 'users':
               seederusers($_POST['amount']);

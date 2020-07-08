@@ -13,6 +13,7 @@ function seederproducts($input)
     $sql = "SET GLOBAL FOREIGN_KEY_CHECKS = 1";
     $stmt = conn()->prepare($sql);
     $stmt->execute();
+    deleteDirectory ($_SERVER['DOCUMENT_ROOT']."/app/uploads/$token/");
     
     for ($i = 0; $i < $input; $i++) {
       $title         = $faker->sentence($nbWords = 3, $variableNbWords = true);
@@ -23,6 +24,9 @@ function seederproducts($input)
       $status        = $faker->numberBetween($min = 0, $max = 2);
       $categories_id = $faker->numberBetween($min = 1, $max = 3);
       $users_id      = 1;
+      mkdir($_SERVER['DOCUMENT_ROOT']."/app/uploads/$token/",0777);
+      $image      = $faker->image($_SERVER['DOCUMENT_ROOT']."/app/uploads/$token", 800, 600, null, false);
+      rename ($_SERVER['DOCUMENT_ROOT']."/app/uploads/$token/".$image, $_SERVER['DOCUMENT_ROOT']."/app/uploads/$token/1.jpg");
 
       $sql = "INSERT INTO products (title, summary, body, date, token, status, categories_id, users_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
       $stmt = conn()->prepare($sql);

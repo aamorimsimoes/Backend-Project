@@ -1,4 +1,6 @@
 <?php
+
+
 /**
  * Connects to database.
  *
