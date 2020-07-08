@@ -5,8 +5,8 @@ const gulp = require("gulp"),
   hashsrc = require("gulp-hash-src"),
   postcss = require("gulp-postcss"),
   sass = require("gulp-sass"),
-  sourcemaps = require("gulp-sourcemaps");
-
+  sourcemaps = require("gulp-sourcemaps"),
+  cache = require("gulp-cached");
 
 
 const paths = {
@@ -71,6 +71,7 @@ function styles() {
 function templates() {
   return gulp
   .src(paths.templates.src)
+  .pipe(cache())
   .pipe(gulp.dest(paths.templates.dest))
   .pipe(browserSync.stream());
 }
