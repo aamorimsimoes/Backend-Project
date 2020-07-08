@@ -3,7 +3,6 @@
 function seedernews($input)
   {
     $faker = Faker\Factory::create();
-    $faker = Faker\Factory::create();
     $sql = "SET GLOBAL FOREIGN_KEY_CHECKS = 0";
     $stmt = conn()->prepare($sql);
     $stmt->execute();
@@ -23,6 +22,9 @@ function seedernews($input)
       $token      = $faker->uuid;
       $status     = $faker->numberBetween($min = 0, $max = 2);
       $users_id   = 1; // RANDOM USER INSERT PRODUCTS OR NEWS
+      mkdir($_SERVER['DOCUMENT_ROOT']."/app/uploads/$token/",0777);
+      $image      = $faker->image($_SERVER['DOCUMENT_ROOT']."/app/uploads/$token", 800, 600, null, false);
+      rename ($_SERVER['DOCUMENT_ROOT']."/app/uploads/$token/".$image, $_SERVER['DOCUMENT_ROOT']."/app/uploads/$token/1.jpg");
 
       $sql = "INSERT INTO news (title, summary, body, date, author, token, status, users_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
       $stmt = conn()->prepare($sql);
