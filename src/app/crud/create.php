@@ -162,6 +162,8 @@ if (!isset($_SESSION['loggedin'])) {
                     $i = 0;
                     //echo($path);
                     //var_dump($images);
+                    var_dump($_GET);
+                    die();
                     foreach ($images['tmp_name'] as $image) {
                       if (!move_uploaded_file($image, $path . ($i + 1) . strchr($extensions[$i], '.'))) {
                         array_push($errors, "Error: An error occurred uploading your images.");
