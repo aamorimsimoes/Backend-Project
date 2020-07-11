@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Manrope:300,400,500,600,800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&family=Comfortaa:wght@300;400;500;600;700&display=swap" rel="stylesheet');
 
 
 @import 'reset';
@@ -20,7 +21,8 @@ body {
   color: #043353;
   display: flex;
   flex-direction: column;
-  font-family: 'Manrope', sans-serif;
+  //font-family: 'Manrope', sans-serif;
+  font-family: 'Comfortaa', cursive;
   font-size: 1.5rem;
   margin: 0 auto;
 }
