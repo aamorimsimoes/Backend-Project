@@ -1,5 +1,5 @@
 <?php
-  header('Location: /app');
+  header('Location: /app/home.php');
   exit;
 ?>
 <!DOCTYPE html>
