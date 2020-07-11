@@ -3,10 +3,17 @@ require_once('../../vendor/claviska/simpleimage/src/claviska/SimpleImage.php');
 $image = new \claviska\SimpleImage();
 if (!empty($_GET['token'])) {
             // Magic! ✨
-            ($_GET['s'] == 'news') ? $file = 1 : $file = 1;
-            
+            $fileName = 1;
+            $dir = "";
+            if ($_GET['s'] === "news") {
+              $dir .= "news";
+            } else if ($_GET['s'] === "products") {
+              $dir .= "products";
+            }
+           // echo $_SERVER['DOCUMENT_ROOT']."/app/uploads/".$dir."/".$_GET['token'].'/'.$fileName.'.jpg';
+            //die();
             $image
-              ->fromFile('../uploads/'.$_GET['token'].'/'.$file.'.jpg')
+              ->fromFile($_SERVER['DOCUMENT_ROOT']."/app/uploads/".$dir."/".$_GET['token'].'/'.$fileName.'.jpg')
               ->autoOrient()
               ->resize(900)
               ->toScreen();  
