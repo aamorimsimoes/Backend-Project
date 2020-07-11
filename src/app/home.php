@@ -26,7 +26,7 @@ if (!isset($_SESSION['loggedin'])) {
               $stmt = null;
               foreach ($data as $r) { ?>
                 <div class="card" onclick="location.href='crud/read.php?s=news&token=<?= $r['token'] ?>'" style="cursor: pointer;">
-                  <img src="uploads/<?= $r['token'] ?>/1.jpg" alt="newsImage" style="width:100%">
+                  <img src="uploads/news/<?= $r['token'] ?>/1.jpg" alt="newsImage" style="width:100%">
                   <div class="card-container">
                     <p style="font-size:smaller;display:flex;align-items:center">by <?= $r['author'] ?> on <?= $r['date'] ?></p>
                     <h4><b><?= $r['title'] ?></b></h4>
@@ -49,9 +49,23 @@ if (!isset($_SESSION['loggedin'])) {
               $stmt = null;
               foreach ($data as $r) { ?>
                 <div class="card" onclick="location.href='crud/read.php?s=products&token=<?= $r['token'] ?>'" style="cursor: pointer;">
-                  <img src="uploads/<?= $r['token'] ?>/1.jpg" alt="productsImage" style="width:100%">
+                  <img src="uploads/products/<?= $r['token'] ?>/1.jpg" alt="productsImage" style="width:100%">
                   <div class="card-container">
-                    <p style="font-size:smaller;display:flex;align-items:center">by <?= $r['author'] ?> on <?= $r['date'] ?></p>
+                    <p style="font-size:smaller;display:flex;align-items:center">Category
+                      <?php
+                      switch ($r['categories_id']) {
+                        case 1:
+                          echo "Robotic Cells";
+                          break;
+                        case 2:
+                          echo "Special Machines";
+                          break;
+                        case 3:
+                          echo "Electrical Services";
+                          break;
+                      }
+                      ?>
+                      on <?= $r['date'] ?></p>
                     <h4><b><?= $r['title'] ?></b></h4>
                     <p><?= $r['summary'] ?></p>
                   </div>
