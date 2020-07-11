@@ -55,10 +55,8 @@ $nUsers = count($r);
 $pdf->AliasNbPages();
 $pdf->AddPage();
 $pdf->SetFont('Times', '', 12);
-$pdf->Write(6, "Get results for id, name email, active users and registration date order by id.");
+$pdf->Write(6, "Results for active users at the moment of exportation (view at the page bottom) with the columns: id, name, email and registration date ordered by id.");
 $pdf->Ln(10);
-// for ($i = 1; $i <= 20; $i++)
-//   $pdf->Cell(0, 5, 'Printing ' . $i, 0, 1);
 
 /**
   Table
