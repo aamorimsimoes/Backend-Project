@@ -42,7 +42,7 @@ if (!isset($_SESSION['loggedin'])) {
                   <tr>
                     <th class="center">#</th>
                     <th class="wide">Title</th>
-                    <!-- FIXME width incorrect, fix! Author to small in comparison with total width -->
+                    <th>Summary</th>
                     <th>Date</th>
                     <th>Author</th>
                     <th>Status</th>
@@ -58,6 +58,7 @@ if (!isset($_SESSION['loggedin'])) {
                     <tr>
                       <td class="center"><?php echo $i; ?></td>
                       <td><a href="../crud/create.php?s=news&token=<?php echo $r['token']; ?>"><?php echo $r['title']; ?></a></td>
+                      <td class="mono"><?php echo $r['summary']; ?></td>
                       <td class="mono"><?php echo date('d-m-Y', strtotime($r['date'])); ?></td>
                       <td class="mono"><?php echo $r['author']; ?></td>
                       <td>
