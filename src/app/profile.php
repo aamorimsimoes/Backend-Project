@@ -70,9 +70,7 @@ if (!isset($_SESSION['loggedin'])) {
 
             $dir          = "uploads/avatar/$token/";
             $file         = $_FILES["pic"]["name"];
-            var_dump($_FILES);
-
-
+        
             $allows_ext   = array('png', 'gif', 'jpg', 'jpeg');
             $allows_size  = 1048576;
 
