@@ -32,7 +32,6 @@ if (!isset($_SESSION['loggedin'])) {
                 <div style="border-radius:5px 5px 0 0;width:100%;height:500px;background-size:cover;background-image:url('http://<?= $_SERVER['HTTP_HOST'] ?>/app/includes/image.php?s=<?= $section ?>&token=<?= $data['token'] ?>');"></div>
                 
                 <div class="card-container">
-                  <p style="font-size:smaller;display:flex;align-items:center">by <?= $data['author'] ?> on <?= $data['date'] ?>
                     <div>
                       <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="false">Tweet</a>
                       <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
