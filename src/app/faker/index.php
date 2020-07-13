@@ -19,7 +19,7 @@ if (!isset($_SESSION['loggedin'])) {
     <main>
       <div class="container">
         <?php require_once('../includes/menu.php'); ?>
-        <div>
+        <div class="main-container">
           <div class="section-title">
             <h1>Data Generator</h1>
           </div>
