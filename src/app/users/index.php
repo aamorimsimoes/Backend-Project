@@ -13,13 +13,13 @@ if (!isset($_SESSION['loggedin'])) {
     <main>
       <div class="container">
         <?php require_once('../includes/menu.php'); ?>
-        <div>
+        <div class="main-container">
           <div class="section-title">
             <h1>Users</h1>
             <div>
-              <a class="button" href="<?php $_SERVER['HTTP_HOST']?>../../app/fpdf182/usersfpdf.php" target="_blank"/>
-                <svg viewBox="0 0 24 24" width="24" height="24">
-                  <path fill="currentColor" d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-1-11H7v2h4v4h2v-4h4v-2h-4V7h-2v4z" /></svg>Export data</a>
+              <a class="button" href="<?php $_SERVER['HTTP_HOST'] ?>../../app/fpdf182/usersfpdf.php" target="_blank" />
+              <svg viewBox="0 0 24 24" width="24" height="24">
+                <path fill="currentColor" d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-1-11H7v2h4v4h2v-4h4v-2h-4V7h-2v4z" /></svg>Export data</a>
             </div>
           </div>
           <?php
@@ -43,10 +43,9 @@ if (!isset($_SESSION['loggedin'])) {
                     <th class="center">#</th>
                     <th>Name</th>
                     <th>Email</th>
-                    <th>Password</th>
                     <th>Status</th>
-                    <th>Token</th>
                     <th>Level</th>
+                    <th>Token</th>
                     <th>Registration date</th>
                     <th>Edit</th>
                     <th>Delete</th>
@@ -61,15 +60,17 @@ if (!isset($_SESSION['loggedin'])) {
                       <td class="center"><?php echo $r['id']; ?></td>
                       <td><a href="../crud/create.php?s=users&token=<?php echo $r['token']; ?>"><?php echo $r['name']; ?></a></td>
                       <td><?php echo $r['email']; ?></td>
-                      <td><?php echo $r['password']; ?></td>
                       <td>
                         <?php
                         echo $r['status'] === 1 ? "Active" : "Inactive";
                         ?>
                       </td>
+                      <td>
+                        <?php
+                        echo $r['level'] === 2 ? "Admin" : "User";
+                        ?>
+                      </td>
                       <td><?php echo $r['token']; ?></td>
-                      <td><?php echo $r['level']; ?></td>
-
                       <td class="mono"><?php echo $r['registration_date']; ?></td>
                       <td>
                         <a href="../crud/create.php?s=<?php echo $section; ?>&token=<?php echo $r['token']; ?>">
