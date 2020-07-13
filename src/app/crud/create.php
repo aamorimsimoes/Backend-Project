@@ -33,28 +33,66 @@ if (!isset($_SESSION['loggedin'])) {
           </div>
           <form action="create.php?s=<?= $section ?><?php if (!empty($token)) echo "&token=$token"; ?>" method="post" enctype="multipart/form-data">
             <fieldset>
-              <ul>
-                <li>
-                  <label for="title">Title</label>
-                  <input type="text" name="title" value="<?php echo !empty($r['title']) ? $r['title'] : null; ?>">
-                </li>
-                <?php if ($section === "news") { ?>
+              <?php if ($section === "users") { ?>
+                <ul>
+                  <li>
+                    <label for="name">Name</label>
+                    <input type="text" name="title" value="<?php echo !empty($r['name']) ? $r['name'] : null; ?>">
+                  </li>
+                  <li>
+                    <label for="email">Email</label>
+                    <input type="text" name="email" value="<?php echo !empty($r['email']) ? $r['email'] : null; ?>">
+                  </li>
+                  <li>
+                    <label for="status">Status</label>
+                    <select name="status">
+                      <option value="0" <?php echo (!empty($r['status']) && $r['status'] === 0) ? 'selected' : ''; ?>>Inactive</option>
+                      <option value="1" <?php echo (!empty($r['status']) && $r['status'] === 1) ? 'selected' : ''; ?>>Active</option>
+                    </select>
+                  </li>
+                  <li>
+                    <label for="level">Level</label>
+                    <select name="level">
+                      <option value="1" <?php echo (!empty($r['level']) && $r['level'] === 1) ? 'selected' : ''; ?>>User</option>
+                      <option value="2" <?php echo (!empty($r['level']) && $r['level'] === 2) ? 'selected' : ''; ?>>Admin</option>
+                    </select>
+                  </li>
+
+                  <h2>Additional information:</h2>
+                  <li>
+                    <label for="token">Token</label>
+                    <input type="text" name="token" readonly value="<?php echo !empty($r['token']) ? $r['token'] : null; ?>">
+                  </li>
+                  <li>
+                    <label for="registration_date">Registration Date</label>
+                    <input type="text" name="registration_date" readonly value="<?php echo $r['registration_date'] ?>">
+                  </li>
+                </ul>
+              <?php } else if ($section === "news" || "products") { ?>
+                <ul>
+                  <li>
+                    <label for="title">Title</label>
+                    <input type="text" name="title" value="<?php echo !empty($r['title']) ? $r['title'] : null; ?>">
+                  </li>
+
                   <li>
                     <label for="summary">Summary</label>
                     <textarea rows="3" name="summary"><?php echo !empty($r['summary']) ? $r['summary'] : null; ?></textarea>
                   </li>
+
+                  <li>
+                    <label for="body">Body</label>
+                    <textarea rows="10" name="body"><?php echo !empty($r['body']) ? $r['body'] : null; ?></textarea>
+                  </li>
+                  <li>
+                    <?php if ($section === "news") { ?>
+                      <label for="author">Author</label>
+                      <input type="text" name="author" value="<?php echo !empty($r['author']) ? $r['author'] : null; ?>">
+                  </li>
                 <?php } ?>
                 <li>
-                  <label for="body">Body</label>
-                  <textarea rows="10" name="body"><?php echo !empty($r['body']) ? $r['body'] : null; ?></textarea>
-                </li>
-                <li>
-                  <label for="author">Author</label>
-                  <input type="text" name="author" value="<?php echo !empty($r['author']) ? $r['author'] : null; ?>">
-                </li>
-                <li>
                   <label for="image">Image</label>
-                  <input type="file" <?= ($section === 'news') ? "multiple=\"multiple\" name=\"image[]\"" : "name=\"image\"" ?> accept="image/x-png,image/gif,image/jpeg">
+                  <input type="file" name="image" accept="image/x-png,image/gif,image/jpeg">
                 </li>
                 <?php if ($section === "products") {
                   $sql = "SELECT * FROM categories";
@@ -71,10 +109,10 @@ if (!isset($_SESSION['loggedin'])) {
                     <label for="categories">Categories</label>
                     <select name="categories">
                       <?php
-                        foreach ($cat as $c) {
-                          $active = $c['id'] === $r['categories_id'] ? "selected" : null;
-                          echo "<option ".$active." value=".$c['id'].">" . $c['category'] . " </option>";
-                        }
+                      foreach ($cat as $c) {
+                        $active = $c['id'] === $r['categories_id'] ? "selected" : null;
+                        echo "<option " . $active . " value=" . $c['id'] . ">" . $c['category'] . " </option>";
+                      }
                       ?>
                     </select>
                   </li>
@@ -92,7 +130,8 @@ if (!isset($_SESSION['loggedin'])) {
                     </select>
                   </li>
                 <?php } ?>
-              </ul>
+                </ul>
+              <?php } ?>
             </fieldset>
             <fieldset>
               <input type="hidden" name="section" value="<?php echo $section; ?>">
@@ -102,107 +141,53 @@ if (!isset($_SESSION['loggedin'])) {
           </form>
           <?php
           if (!empty($_POST)) {
-            $title        = $_POST['title'];
-            $summary      = $_POST['summary'];
-            $body         = $_POST['body'];
-            $author       = $_POST['author'];
+            $email        = isset($_POST['email']) ? $_POST['email'] : "";
+            $title        = isset($_POST['title']) ? $_POST['title'] : "";
+            $summary      = isset($_POST['summary']) ? $_POST['summary'] : "";
+            $body         = isset($_POST['body']) ? $_POST['body'] : "";
+            $author       = isset($_POST['author']) ? $_POST['author'] : "";
             $images       = $_FILES['image'];
-            $usersId      = $_SESSION['usersid'];
-            $categoriesId = $_POST['categories'];
+            $usersId      = isset($_SESSION['usersid']) ? $_SESSION['usersid'] : "";
+            $categoriesId = isset($_POST['categories']) ? $_POST['categories'] : "";
             $errors       = [];
-            
+
             $status     = !empty($_POST['status']) ? $_POST['status'] : 0;
+            $level     = !empty($_POST['level']) ? $_POST['level'] : 0;
             $token      = !empty($_POST['token']) ? $_POST['token'] : sha1(bin2hex(date('U')));
             $timestamp  = date('Y-m-d');
             $section    = $_POST['section'];
-            if (is_array($images['tmp_name']) && $images['tmp_name'][0] == '') {
-              unset($images);
-            }
             if (!empty($images['tmp_name'])) {
-              if (is_array($images['size'])) {
-                foreach ($images['size'] as $size) {
-                  if ($size > 2097152) {
-                    array_push($errors, "Error: Maximum size for images is 2MB");
-                    break;
-                  }
-                }
-                foreach ($images['name'] as $name) {
-                  if (strtolower(strchr($name, '.')) != '.jpeg' && strtolower(strchr($name, '.')) != '.jpg') {
-                    array_push($errors, "Error: Invalid image(s) type");
-                    break;
-                  }
-                }
-              } else {
-                if ($images['size'] > 2097152) {
-                  array_push($errors, "Error: Maximum size for images is 2MB");
-                }
-                if (strtolower(strchr($images['name'], '.')) != '.jpeg' && strtolower(strchr($images['name'], '.')) != '.jpg') {
-                  array_push($errors, "Error: Invalid image type");
-                }
+              if ($images['size'] > 2097152) {
+                array_push($errors, "Error: Maximum size for images is 2MB");
+              }
+              if (strtolower(strchr($images['name'], '.')) != '.jpeg' && strtolower(strchr($images['name'], '.')) != '.jpg') {
+                array_push($errors, "Error: Invalid image type");
               }
             }
             if (!empty($errors)) {
               foreach ($errors as $e) {
                 echo $e;
               }
-              die();
             } else {
               if (!empty($images['tmp_name'])) {
-                if (is_array($images['tmp_name'])) {
-                  if (count($images['tmp_name']) > 0) {
-                    $path = $_SERVER['DOCUMENT_ROOT'] . "/app/uploads/$token/";
-                    if (is_dir($path)) {
-                      deleteDirectory($path);
-                    }
-                    mkdir($path, 0777, true);
-                    $extensions = [];
-                    foreach ($images['name'] as $image) {
-                      array_push($extensions, strchr($image, '.'));
-                    }
-                    $i = 0;
-                    //echo($path);
-                    //var_dump($images);
-                    var_dump($_GET);
-                    die();
-                    foreach ($images['tmp_name'] as $image) {
-                      if (!move_uploaded_file($image, $path . ($i + 1) . strchr($extensions[$i], '.'))) {
-                        array_push($errors, "Error: An error occurred uploading your images.");
-                        break;
-                      }
-                      $i++;
-                    }
-                  }
-                } else {
-                  $extension = strchr($images['name'], '.');
-                  $path = $_SERVER['DOCUMENT_ROOT'] . "/app/uploads/$token/";
-                  if (is_dir($path)) {
-                    deleteDirectory($path);
-                  }
-                  mkdir($path, 0777, true);
-                  if (!move_uploaded_file($images['tmp_name'], $path . $token . strchr($images['name'], '.'))) {
-                    array_push($errors, "Error: An error occurred uploading image.");
-                  }
+                switch ($section) {
+                  case 'news':
+                    $path = $_SERVER['DOCUMENT_ROOT'] . "/app/uploads/news/$token/";
+                    break;
+                  case 'products':
+                    $path = $_SERVER['DOCUMENT_ROOT'] . "/app/uploads/products/$token/";
+                    break;
+                  case 'users':
+                    $path = $_SERVER['DOCUMENT_ROOT'] . "/app/uploads/avatar/$token/";
+                    break;
                 }
-              }
-              if (!empty($files['tmp_name'])) {
-                if (count($files['tmp_name']) > 0) {
-                  $path = $_SERVER['DOCUMENT_ROOT'] . "app/uploads/$token/files/";
-                  if (is_dir($path)) {
-                    deleteDirectory($path);
-                  }
-                  mkdir($path, 0777, true);
-                  $extensions = [];
-                  foreach ($files['name'] as $file) {
-                    array_push($extensions, strchr($file, '.'));
-                  }
-                  $i = 0;
-                  foreach ($files['tmp_name'] as $file) {
-                    if (!move_uploaded_file($file, $path . ($i + 1) . strchr($extensions[$i], '.'))) {
-                      array_push($errors, "Error: An error occurred uploading your files.");
-                      break;
-                    }
-                    $i++;
-                  }
+                if (is_dir($path)) {
+                  deleteDirectory($path);
+                }
+                mkdir($path, 0777, true);
+
+                if (!move_uploaded_file($images['tmp_name'], $path . "1.jpg")) {
+                  array_push($errors, "Error: An error occurred uploading your images.");
                 }
               }
               if (!empty($errors)) {
@@ -212,72 +197,100 @@ if (!isset($_SESSION['loggedin'])) {
                 die();
               }
             }
-            if ($section === "news") {
-              if (!empty($_POST['token'])) {
+            switch ($section) {
+              case "news":
+                if (!empty($_POST['token'])) {
 
-                if ($_SESSION['level'] >= 2) {
-                  $sql = "UPDATE " . $section . " SET title = ?, summary = ?, body = ?, author = ?, status = ? WHERE token = ?";
+                  if ($_SESSION['level'] >= 2) {
+                    $sql = "UPDATE " . $section . " SET title = ?, summary = ?, body = ?, author = ?, status = ? WHERE token = ?";
+                  } else {
+                    $sql = "UPDATE " . $section . " SET title = ?, summary = ?, body = ?, author = ? WHERE token = ?";
+                  }
+
+                  $stmt = conn()->prepare($sql);
+                  $stmt->bindValue(1, $title, PDO::PARAM_STR);
+                  $stmt->bindValue(2, $summary, PDO::PARAM_STR);
+                  $stmt->bindValue(3, $body, PDO::PARAM_STR);
+                  $stmt->bindValue(4, $author, PDO::PARAM_STR);
+
+
+                  if ($_SESSION['level'] >= 2) {
+                    $stmt->bindValue(5, $status, PDO::PARAM_INT);
+                    $stmt->bindValue(6, $token, PDO::PARAM_STR);
+                  } else {
+                    $stmt->bindValue(5, $token, PDO::PARAM_STR);
+                  }
                 } else {
-                  $sql = "UPDATE " . $section . " SET title = ?, summary = ?, body = ?, author = ? WHERE token = ?";
-                }
-
-                $stmt = conn()->prepare($sql);
-                $stmt->bindValue(1, $title, PDO::PARAM_STR);
-                $stmt->bindValue(2, $summary, PDO::PARAM_STR);
-                $stmt->bindValue(3, $body, PDO::PARAM_STR);
-                $stmt->bindValue(4, $author, PDO::PARAM_STR);
-
-
-                if ($_SESSION['level'] >= 2) {
+                  $sql = "INSERT INTO " . $section . " (title, summary, body, author, status, token, date, users_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                  $stmt = conn()->prepare($sql);
+                  $stmt->bindValue(1, $title, PDO::PARAM_STR);
+                  $stmt->bindValue(2, $summary, PDO::PARAM_STR);
+                  $stmt->bindValue(3, $body, PDO::PARAM_STR);
+                  $stmt->bindValue(4, $author, PDO::PARAM_STR);
                   $stmt->bindValue(5, $status, PDO::PARAM_INT);
                   $stmt->bindValue(6, $token, PDO::PARAM_STR);
+                  $stmt->bindValue(7, $timestamp, PDO::PARAM_STR);
+                  $stmt->bindValue(8, $usersId, PDO::PARAM_STR);
+                };
+                break;
+
+              case "products":
+                if (!empty($_POST['token'])) {
+                  if ($_SESSION['level'] >= 2) {
+                    $sql = "UPDATE " . $section . " SET title = ?, summary = ?, body = ?, categories_id = ?, status = ? WHERE token = ?";
+                  } else {
+                    $sql = "UPDATE " . $section . " SET title = ?, summary = ?, body = ?, categories_id = ? WHERE token = ?";
+                  }
+
+                  $stmt = conn()->prepare($sql);
+                  $stmt->bindValue(1, $title, PDO::PARAM_STR);
+                  $stmt->bindValue(2, $summary, PDO::PARAM_STR);
+                  $stmt->bindValue(3, $body, PDO::PARAM_STR);
+                  $stmt->bindValue(4, $categoriesId, PDO::PARAM_STR);
+
+
+                  if ($_SESSION['level'] >= 2) {
+                    $stmt->bindValue(5, $status, PDO::PARAM_INT);
+                    $stmt->bindValue(6, $token, PDO::PARAM_STR);
+                  } else {
+                    $stmt->bindValue(5, $token, PDO::PARAM_STR);
+                  }
                 } else {
-                  $stmt->bindValue(5, $token, PDO::PARAM_STR);
-                }
-              } else {
-                $sql = "INSERT INTO " . $section . " (title, summary, body, author, status, token, date, users_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-                $stmt = conn()->prepare($sql);
-                $stmt->bindValue(1, $title, PDO::PARAM_STR);
-                $stmt->bindValue(2, $summary, PDO::PARAM_STR);
-                $stmt->bindValue(3, $body, PDO::PARAM_STR);
-                $stmt->bindValue(4, $author, PDO::PARAM_STR);
-                $stmt->bindValue(5, $status, PDO::PARAM_INT);
-                $stmt->bindValue(6, $token, PDO::PARAM_STR);
-                $stmt->bindValue(7, $timestamp, PDO::PARAM_STR);
-                $stmt->bindValue(8, $usersId, PDO::PARAM_STR);
-              }
-            } else if ($section === "products") {
-              if (!empty($_POST['token'])) {
-                if ($_SESSION['level'] >= 2) {
-                  $sql = "UPDATE " . $section . " SET title = ?, body = ?, author = ?, status = ? WHERE token = ?";
-                } else {
-                  $sql = "UPDATE " . $section . " SET title = ?, body = ?, author = ? WHERE token = ?";
-                }
-
-                $stmt = conn()->prepare($sql);
-                $stmt->bindValue(1, $title, PDO::PARAM_STR);
-                $stmt->bindValue(2, $body, PDO::PARAM_STR);
-                $stmt->bindValue(3, $author, PDO::PARAM_STR);
-
-
-                if ($_SESSION['level'] >= 2) {
+                  $sql = "INSERT INTO products (title, summary, body, status, token, date, categories_id, users_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                  $stmt = conn()->prepare($sql);
+                  $stmt->bindValue(1, $title, PDO::PARAM_STR);
+                  $stmt->bindValue(2, $summary, PDO::PARAM_STR);
+                  $stmt->bindValue(3, $body, PDO::PARAM_STR);
                   $stmt->bindValue(4, $status, PDO::PARAM_INT);
                   $stmt->bindValue(5, $token, PDO::PARAM_STR);
-                } else {
-                  $stmt->bindValue(4, $token, PDO::PARAM_STR);
+                  $stmt->bindValue(6, $timestamp, PDO::PARAM_STR);
+                  $stmt->bindValue(7, $categoriesId, PDO::PARAM_STR);
+                  $stmt->bindValue(8, $usersId, PDO::PARAM_STR);
+                };
+                break;
+
+              case "users":
+                if (!empty($_POST['token'])) {
+                  if ($_SESSION['level'] >= 2) {
+                    $sql = "UPDATE " . $section . " SET name = ?, email = ?, status = ?, level = ?  WHERE token = ?";
+                  } else {
+                    $sql = "UPDATE " . $section . " SET name = ?, email = ? WHERE token = ?";
+                  }
+
+                  $stmt = conn()->prepare($sql);
+                  $stmt->bindValue(1, $title, PDO::PARAM_STR);
+                  $stmt->bindValue(2, $email, PDO::PARAM_STR);
+
+
+                  if ($_SESSION['level'] >= 2) {
+                    $stmt->bindValue(3, $status, PDO::PARAM_INT);
+                    $stmt->bindValue(4, $level, PDO::PARAM_INT);
+                    $stmt->bindValue(5, $token, PDO::PARAM_STR);
+                  } else {
+                    $stmt->bindValue(3, $token, PDO::PARAM_STR);
+                  }
                 }
-              } else {
-                $sql = "INSERT INTO products (title, summary, body, status, token, date, categories_id, users_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-                $stmt = conn()->prepare($sql);
-                $stmt->bindValue(1, $title, PDO::PARAM_STR);
-                $stmt->bindValue(2, $summary, PDO::PARAM_STR);
-                $stmt->bindValue(3, $body, PDO::PARAM_STR);
-                $stmt->bindValue(4, $status, PDO::PARAM_INT);
-                $stmt->bindValue(5, $token, PDO::PARAM_STR);
-                $stmt->bindValue(6, $timestamp, PDO::PARAM_STR);
-                $stmt->bindValue(7, $categoriesId, PDO::PARAM_STR);
-                $stmt->bindValue(8, $usersId, PDO::PARAM_STR);
-              }
+                break;
             }
             if ($stmt->execute()) {
               $stmt = null;
