@@ -2,7 +2,7 @@
 # Final backend project for Fullstack Web Delevoper Course
 
 An App the with four basic functions of persistent storage CRUD* previously designed with an entity relationship diagram.
-The application will allow the user to register (receiving an email ([PHPMailer](https://github.com/PHPMailer/PHPMailer) and validating it) and login in the reserved area by adding and editing information (news & products) accessible to the community / company.
+The application will allow the user to register and validate it (receiving an email with [PHPMailer](https://github.com/PHPMailer/PHPMailer)(this is a simple validation step to complete the registration process where the user must enter a valid email address which they have access) and login in the reserved area by adding and editing information (news & products) accessible to the community / company.
 Users will be separated into two levels with different levels of access and permissions:
 ### Admin: 
 This permission level allows access to two additional sections: users dashboard and generator. 
