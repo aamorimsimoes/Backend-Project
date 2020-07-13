@@ -3,13 +3,13 @@
 function seederusers($input)
   {
     $faker = Faker\Factory::create();
-    $sql = "SET GLOBAL FOREIGN_KEY_CHECKS = 0";
+    $sql = "SET FOREIGN_KEY_CHECKS = 0";
     $stmt = conn()->prepare($sql);
     $stmt->execute();
     $sql = "TRUNCATE TABLE users";
     $stmt = conn()->prepare($sql);
     $stmt->execute();
-    $sql = "SET GLOBAL FOREIGN_KEY_CHECKS = 1";
+    $sql = "SET FOREIGN_KEY_CHECKS = 1";
     $stmt = conn()->prepare($sql);
     $stmt->execute();
      // 1nd mandatory INSERT (database test)

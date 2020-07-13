@@ -4,13 +4,13 @@ function seederproducts($input)
   {
     $faker = Faker\Factory::create();
     $faker = Faker\Factory::create();
-    $sql = "SET GLOBAL FOREIGN_KEY_CHECKS = 0";
+    $sql = "SET FOREIGN_KEY_CHECKS = 0";
     $stmt = conn()->prepare($sql);
     $stmt->execute();
     $sql = "TRUNCATE TABLE products";
     $stmt = conn()->prepare($sql);
     $stmt->execute();
-    $sql = "SET GLOBAL FOREIGN_KEY_CHECKS = 1";
+    $sql = "SET FOREIGN_KEY_CHECKS = 1";
     $stmt = conn()->prepare($sql);
     $stmt->execute();
     deleteDirectory ($_SERVER['DOCUMENT_ROOT']."/app/uploads/products");
