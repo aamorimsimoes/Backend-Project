@@ -20,17 +20,29 @@ ___
 # Installation / Usage
 
 1. Clone the repository: git clone https://github.com/aamorimsimoes/backendProject.git
-2. Install [composer](https://getcomposer.org/) dependencies:
-```bash
-$ composer i
-```
-3. Install [npm](https://www.npmjs.com/) dependencies:
+2. Install [npm](https://www.npmjs.com/) dependencies:
 
 ```bash
 $ npm install
 ```
-4. Run [Gulp](https://gulpjs.com/)
+3. Install [composer](https://getcomposer.org/) dependencies:
+```bash
+$ composer i
+```
+4. Run [Gulp](https://gulpjs.com/) (since the [browsersync](https://www.browsersync.io/) is integrated with task runner Gulp it is possible to create a personalised test environment)
 ```bash
 $ gulp
 ```
+
+5. Login
+
+Admin 
+Email: admin@company.com 
+Password: 12345
+Default User 
+Email: user@company.com 
+Password: 12345
+
+6. Enjoy it!
+
 
