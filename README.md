@@ -36,13 +36,16 @@ $ gulp
 
 5. Login
 
-Admin 
-Email: admin@company.com 
-Password: 12345
-Default User 
-Email: user@company.com 
-Password: 12345
+| Login | Admin |
+| ------ | ------ |
+| Username | admin@company.com |
+| Password | 12345 |
 
-6. Enjoy it!
+| Login | User |
+| ------ | ------ |
+| Username | user@company.com |
+| Password | 12345 |
+
+6. ## Enjoy it!
 
 
