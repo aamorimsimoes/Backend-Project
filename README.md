@@ -1,7 +1,7 @@
 # Company App 
 # Final backend project for Fullstack Web Delevoper Course
 
-An App with four basic functions of persistent storage CRUD* previously designed with an entity relationship diagram [MySQL Database](https://www.mysql.com/).
+An App with four basic functions of persistent storage [CRUD](https://developer.mozilla.org/en-US/docs/Glossary/CRUD) previously designed with an entity relationship diagram [MySQL Database](https://www.mysql.com/).
 The application will allow the user to register, receiving an email sended by [PHPMailer](https://github.com/PHPMailer/PHPMailer) and validating it. Login in the reserved area, adding and editing information accessible to the community / company.
 
 Registered users are separated with different levels of access and permissions:
