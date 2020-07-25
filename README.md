@@ -1,24 +1,51 @@
-# backendProject
-Backend Project with PHP;
-objective: produce a CRUD application (CRUD is an acronym for Create, Read, Update, and Delete. CRUD operations are basic data manipulation for database), ready to production;
+# Company App 
+# Final backend project for Fullstack Web Delevoper Course
 
-# develop tools
-- using tailwind css, browser sync
-- Database and diagram ERR has been developed with MySQLWorkbench 
+An App with four basic functions of persistent storage CRUD* previously designed with an entity relationship diagram [MySQL Database](https://www.mysql.com/).
+The application will allow the user to register, receiving an email sended by [PHPMailer](https://github.com/PHPMailer/PHPMailer) and validating it. Login in the reserved area, adding and editing information accessible to the community / company.
 
-# run:
-- npm i
-- composer i
+Registered users are separated with different levels of access and permissions:
+
+##### User: 
+This permission level allows access to basic functionalities such as adding and editing news and products which are also available at the home page for detailed reading and edit profile info;
+All information submitted by the user has the status "review" for later validation by the admin and publication on the home page;
+
+##### Admin: 
+This permission level allows access to two additional sections: users dashboard and generator. 
+- **Users dashboard** allows you to manage access levels, if the user is active or blocked and export data generating a PDF with active users using [FPDF](http://www.fpdf.org/) library;
+- **Generator** allows you to feed a field like news, products and users using [Faker](https://github.com/fzaninotto/Faker) library for the purpose of testing;
+
+Also allows you to change news and products state (draft, archived, review or published) and manage the status of those users as active or blocked and permission level, admin or user; 
+___
+# Installation / Usage
+
+1. Clone the repository: git clone https://github.com/aamorimsimoes/backendProject.git
+2. Install [npm](https://www.npmjs.com/) dependencies:
+
+```bash
+$ npm install
+```
+3. Install [composer](https://getcomposer.org/) dependencies:
+```bash
+$ composer i
+```
+4. Run [Gulp](https://gulpjs.com/) (since the [browsersync](https://www.browsersync.io/) is integrated with task runner Gulp it is possible to create a personalised test environment)
+```bash
+$ gulp
+```
+
+5. Login
+
+| Login | Admin |
+| ------ | ------ |
+| Username | admin@company.com |
+| Password | 12345 |
+
+| Login | User |
+| ------ | ------ |
+| Username | user@company.com |
+| Password | 12345 |
+
+6. ## Enjoy it!
 
 
-Comments have been done with: Comment Anchors
-
-The default settings come with anchors for the following tags:
-
-- ANCHOR- Used to indicate a section in your file
-- TODO- An item that is awaiting completion
-- FIXME- An item that requires a bugfix
-- STUB- Used for generated default snippets
-- NOTE- An important note for a specific code section
-- REVIEW- An item that needs additional review
-- SECTION- Used to define a region (See 'Hierarchical anchors')
