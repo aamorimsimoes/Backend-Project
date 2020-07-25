@@ -3,18 +3,18 @@
 function seederusers($input)
   {
     $faker = Faker\Factory::create();
-    $sql = "SET FOREIGN_KEY_CHECKS = 0";
+    $sql = "SET GLOBAL FOREIGN_KEY_CHECKS = 0";
     $stmt = conn()->prepare($sql);
     $stmt->execute();
     $sql = "TRUNCATE TABLE users";
     $stmt = conn()->prepare($sql);
     $stmt->execute();
-    $sql = "SET FOREIGN_KEY_CHECKS = 1";
+    $sql = "SET GLOBAL FOREIGN_KEY_CHECKS = 1";
     $stmt = conn()->prepare($sql);
     $stmt->execute();
      // 1nd mandatory INSERT (database test)
-    $name = 'Amorim+Admin';
-    $email = 'amorimadmin@company.com';
+    $name = 'Admin';
+    $email = 'admin@company.com';
     $password = password_hash("123",PASSWORD_BCRYPT);
     $status = 1;
     $token = $faker->uuid;
@@ -26,8 +26,8 @@ function seederusers($input)
     $stmt->execute([$name, $email, $password, $status, $token, $level]);
 
     // 2nd mandatory INSERT (database test)
-    $name = 'Amorim+User';
-    $email = 'amorimuser@company.com';
+    $name = 'User';
+    $email = 'user@company.com';
     $password = password_hash("123",PASSWORD_BCRYPT);
     $status = 1;
     $token = $faker->uuid;
