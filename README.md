@@ -19,7 +19,11 @@ Also allows you to change news and products state (draft, archived, review or pu
 ___
 # Installation / Usage
 
-1. Clone the repository: git clone https://github.com/aamorimsimoes/backendProject.git
+1. Clone the repository:
+```bash
+$ git clone https://github.com/aamorimsimoes/backendProject.git
+```
+
 2. Install [npm](https://www.npmjs.com/) dependencies:
 
 ```bash
@@ -36,15 +40,10 @@ $ gulp
 
 5. Login
 
-| Login | Admin |
-| ------ | ------ |
-| Username | admin@company.com |
-| Password | 12345 |
-
-| Login | User |
-| ------ | ------ |
-| Username | user@company.com |
-| Password | 12345 |
+| Login | Username | Password | 
+| ------ | ------ | ------ |
+| Admin | admin@company.com | 12345 |
+| User | user@company.com | 12345 |
 
 6. ## Enjoy it!
 
