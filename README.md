@@ -1,4 +1,13 @@
 # Company App 
+<p align="left">
+  <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/aamorimsimoes/Backend-Project?style=for-the-badge">
+  </br>
+  <img alt="GitHub issues" src="https://img.shields.io/github/issues-raw/aamorimsimoes/Backend-Project?style=for-the-badge">
+  <img alt="GitHub closed issues" src="https://img.shields.io/github/issues-closed-raw/aamorimsimoes/Backend-Project?style=for-the-badge">
+  </br>
+  <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/aamorimsimoes/backend-Project?logo=PHP&logoColor=white&style=for-the-badge">
+</p>
+
 # Final backend project for Fullstack Web Delevoper Course
 
 An App with four basic functions of persistent storage [CRUD](https://developer.mozilla.org/en-US/docs/Glossary/CRUD) previously designed with an entity relationship diagram [MySQL Database](https://www.mysql.com/).
